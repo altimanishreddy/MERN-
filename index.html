@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Translator</title>
+</head>
+<body>
+    <input type="text" id="inputText" placeholder="Enter text">
+    <select id="sourceLang">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        </select>
+    <select id="targetLang">
+        <option value="es">Spanish</option>
+        <option value="en">English</option>
+    </select>
+    <button id="translateButton">Translate</button>
+    <p id="translatedText"></p>
+
+    <script>
+        const translateButton = document.getElementById('translateButton');
+        translateButton.addEventListener('click', async () => {
+            const inputText = document.getElementById('inputText').value;
+            const sourceLang = document.getElementById('sourceLang').value;
+            const targetLang = document.getElementById('targetLang').value;
+
+            const response = await fetch('http://localhost:3000/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: inputText, sourceLang: sourceLang, targetLang: targetLang })
+            });
+
+            const data = await response.json();
+            if (data.translatedText) {
+                document.getElementById('translatedText').textContent = data.translatedText;
+            } else {
+                document.getElementById('translatedText').textContent = "Translation failed.";
+            }
+        });
+    </script>
+</body>
+</html>
